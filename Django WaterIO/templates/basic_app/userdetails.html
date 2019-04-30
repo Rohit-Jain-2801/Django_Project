@@ -1,0 +1,83 @@
+<!doctype html>
+{% load static from staticfiles %}
+{% load crispy_forms_tags %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <title>Water.IO</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image">
+    <style>
+      .fo{
+        color:#007bff;
+        font-size: 20px; 
+      }
+      .circular {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+      }
+      .circular img {
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar bg-dark navbar-dark fo">
+        <div class="container">
+            <a href="{% url 'app:page_one' %}" class="navrbar-brand"><i class="fas fa-tint mr-2"></i>Water.IO</a>
+            {% comment %} <img src="{% static 'images/favicon.ico' %}" alt="Water_Drop"> {% endcomment %}
+            <span class="my-2"><i class="fas fa-smile-wink mr-2"></i>Welcome Back!</span>
+        </div>       
+    </nav>
+    <div class="container jumbotron col-sm-8 mt-5 mx-sm-auto">
+      <h1 class="text-center">User Details</h1>
+      <hr />
+      <br>
+      <div class="row">
+        <div class="col-lg-4 col-sm-12 pl-xl-4 pl-lg-1 pr-sm-0">
+          <br>
+          <div class="text-center">
+            {% for i in chk %}
+              {% ifequal i|stringformat:"s" user.username|stringformat:"s" %}
+                <img class="rounded-circle account-img img-circle img-responsive circular mr-4" src="{{media_url}}{{ i.profile_pic }}">
+              {% endifequal %}
+          {% endfor %}
+          </div>
+          <div class="d-none d-xl-inline">
+              <br>
+              <h1 class="acount-heading">{{ user.username }}</h1>
+              <p class="text-secondary">{{ user.email }}</p>
+          </div>
+        </div>
+        <div class=" col-lg-8">
+          <br>
+          <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <b>{{ u_update|crispy }}</b>
+              <b>{{ p_update|crispy }}</b>
+              <a href="{% url 'page_one' %}" class="btn btn-warning ml-1">Go Back</a>
+              <input type="submit" class="btn btn-success ml-2" value="Update">
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html> 

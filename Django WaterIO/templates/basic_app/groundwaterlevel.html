@@ -1,0 +1,255 @@
+<!doctype html>
+{% load static from staticfiles %}
+{% load crispy_forms_tags %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Wendy+One" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <title>Water.IO</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image">
+    <style>
+        #header{
+/*            background-image: url("C:\Users\Mahe\Desktop\header.jpg") center center / cover no-repeat;*/
+            background-image: url("{% static 'images/header.jpg' %}");
+            font-family: 'Wendy One', sans-serif;
+/*            background: #a8e5ef;*/
+        }
+        hr.new{
+            border: 1px solid black;
+        }
+        .fo{
+            color:#007bff;
+            font-size: 20px; 
+        }
+        footer{
+          background: black;
+          color: white;
+        }
+    </style>
+    
+  </head>
+  <body>
+    <nav class="navbar bg-dark navbar-dark fo">
+        <div class="container">
+            <a href="{% url 'app:page_one' %}" class="navrbar-brand"><i class="fas fa-tint mr-2"></i>Water.IO</a>
+            {% comment %} <img src="{% static 'images/favicon.ico' %}" alt="Water_Drop"> {% endcomment %}
+            <a href="{% url 'app:user_details' %}" class="nav-link ml-auto"><i class="fas fa-id-badge mr-2"></i>{{ user.username }}</a>
+            <a href="{% url 'logout' %}" class="nav-link ml-2"><i class="fas fa-user-check mr-2"></i>Logout</a>
+        </div>        
+    </nav>
+    <div id="header" class="jumbotron text-center">
+        <h1 class="display-3"><b>Ground Water Level</b></h1>
+        <hr class="new" />
+    </div>
+    <div class="container">
+      <form id="personForm" data-sites-url="{% url 'app:ajax_load_sites' %}" action="" method="POST">
+        {% csrf_token %}
+        {{ form1|crispy }}
+        {{ form2|crispy }}
+        {{ form3|crispy }}
+        <button class="btn btn-primary" type="button" id="model" data-model-url="{% url 'app:ajax_forecast' %}" onclick="myFunction()">Submit</button>
+        <label class="display-1 text-center" id="text" style="display:none;font-family: 'Wendy One', sans-serif;"><b>Processing...</b></label>
+        <br><br>
+      </form>
+    </div>
+    <div class="container pl-0 pl-md-auto" id="chartContainer" style="height: 300px; width: 100%; display:none"></div>
+
+    <!-- Footer -->
+      <p class="py-3"></p>
+      <footer class="page-footer font-small pt-2">
+          <div class="container text-center text-md-left">
+            <div class="row">
+              <div class="col-md-3 col-lg-3 mr-auto mt-md-4 my-0 mt-4 mb-0 pl-md-0 pl-lg-auto">
+                <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
+                <p class="mb-1 mb-md-auto"><b>Released on:</b> 30/04/2019</p>
+                <p class="mb-1 mb-md-auto"><b>Tools used:</b> Python, Django, ML, HTML, CSS, Javascript, AJAX</p>
+              </div>
+              <div class="col-md-2 col-lg-2 mx-auto mt-md-4 my-0 mt-4 mb-0 pl-md-0 pl-lg-auto">
+                <h5 class="font-weight-bold text-uppercase mb-4">Developer</h5>
+                <ul class="list-unstyled">
+                  <li><p class="mb-1 mb-md-auto">Rohit P. Jain</p></li>
+                  <li><p class="mb-1 mb-md-auto">SE-IT</p></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-lg-2 mx-auto mt-md-4 my-0 mt-4 mb-0 pl-md-4 pl-lg-auto">
+                <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
+                <ul class="list-unstyled">
+                  <li><p class="mb-1 mb-md-auto"><i class="fas fa-home mr-2"></i>DJSCOE, Mumbai</p></li>
+                </ul>
+              </div>
+              <div class="col-md-4 col-lg-3 text mx-auto mt-4 mb-0 pl-md-0 pl-lg-auto">
+                <h5 class="font-weight-bold text-uppercase mb-4">Contact Us</h5>
+                <p class="mb-1 mb-md-auto"><i class="fab fa-google-plus-g mr-2"></i>rohitrocks2801@gmail.com</p>
+                <p class="mb-1 mb-md-auto"><i class="fas fa-phone mr-3"></i>8850237301</p>
+              </div>
+            </div>
+          </div>
+          <hr class="m-0 mt-2 d-md-none" style="background:white;">
+          <div class="footer-copyright text-center py-2">© 2019 Copyright</div>
+        </footer>
+      </div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.0.js" integrity="sha256-DYZMCC8HTC+QDr5QNaIcfR7VSPtcISykd+6eSmBW5qo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+  <script>
+
+      $("#id_block").change(function () {
+        {% comment %} console.log('idhar hai apan log') {% endcomment %}
+      var url = $("#personForm").attr("data-sites-url");      // get the url of the `load_sites` view
+      var blockId = $(this).val();                          // get the selected block ID from the HTML input
+      console.log($("#id_block").val())
+      $.ajax({                                                // initialize an AJAX request
+        url: url,                                             // set the url of the request (= localhost:8000/basic_app/ajax/load-sites/)
+        data: {
+          'block': blockId                                  // add the block id to the GET parameters
+        },
+        success: function (data) {                            // `data` is the return of the `load_sites` view function
+          $("#id_site").html(data);                           // replace the contents of the site input with the data that came from the server
+        }
+      });
+    });
+    {% comment %} alert('connected'); {% endcomment %}
+
+    function myFunction(){
+      text.style.display = "block";
+      window.scrollBy(0, 400);
+      var url = $("#model").attr("data-model-url");      
+      console.log(url)
+      $.ajax({                                                
+        url: url,                                            
+        data: {
+          'block': $("#id_block").val(),
+          'site': $("#id_site").val(),
+          'year': $("#id_year").val()                                  
+        },
+        success: function (data) {
+          data = data.split('a')
+          console.log(data);
+          data1 = JSON.parse(data[0])
+          data2 = JSON.parse(data[1])
+          window.gwl1 = [];
+          for (var i=0;i<22;i++){
+            var g = {
+              x: new Date(data1[i][0]*1000),
+              y: data1[i][1]
+            }
+            gwl1.push(g)
+          }
+          console.log(gwl1)
+          window.gwl2 = [];
+          for (var i=0;i<($("#id_year").val()-2016);i++){
+            var g = {
+              x: new Date(data2[i][0]*1000),
+              y: data2[i][1]
+            }
+            gwl2.push(g)
+          }
+          console.log(gwl2)
+          graph();
+        }
+      });
+    };
+
+    graph = function () {
+      text.style.display = "none";
+      chartContainer.style.display = "block"
+      window.scrollBy(0, 400);
+      var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2",
+        title:{
+          text: "Ground Water Level"
+        },
+        axisX:{
+          title: "Year",
+          valueFormatString: "YYYY",
+          crosshair: {
+            enabled: true,
+            snapToDataPoint: true
+          }
+        },
+        axisY: {
+          title: "Level",
+          crosshair: {
+            enabled: true
+          }
+        },
+        toolTip:{
+          shared:true
+        },  
+        legend:{
+          cursor:"pointer",
+          verticalAlign: "bottom",
+          horizontalAlign: "left",
+          dockInsidePlotArea: true,
+          itemclick: toogleDataSeries
+        },
+        data: [{
+          type: "line",
+          showInLegend: true,
+          name: "Actual Data",
+          markerType: "square",
+          xValueFormatString: "YYYY",
+          color: "#F08080",
+          dataPoints: gwl1
+          {% comment %} dataPoints: [
+            { x: new Date(2017, 0, 3), y: 650 },
+            { x: new Date(2017, 0, 4), y: 700 },
+            { x: new Date(2017, 0, 5), y: 710 },
+            { x: new Date(2017, 0, 6), y: 658 },
+            { x: new Date(2017, 0, 7), y: 734 },
+            { x: new Date(2017, 0, 8), y: 963 },
+            { x: new Date(2017, 0, 9), y: 847 },
+            { x: new Date(2017, 0, 10), y: 853 },
+            { x: new Date(2017, 0, 11), y: 869 },
+            { x: new Date(2017, 0, 12), y: 943 },
+            { x: new Date(2017, 0, 13), y: 970 },
+            { x: new Date(2017, 0, 14), y: 869 },
+            { x: new Date(2017, 0, 15), y: 890 },
+            { x: new Date(2017, 0, 16), y: 930 }
+          ] {% endcomment %}
+        },
+        {
+          type: "line",
+          showInLegend: true,
+          name: "Predicted Data",
+          lineDashType: "dash",
+          dataPoints: gwl2
+          {% comment %} dataPoints: [
+            { x: new Date(2017, 0, 3), y: 510 },
+            { x: new Date(2017, 0, 4), y: 560 },
+            { x: new Date(2017, 0, 5), y: 540 },
+            { x: new Date(2017, 0, 6), y: 558 },
+            { x: new Date(2017, 0, 7), y: 544 },
+            { x: new Date(2017, 0, 8), y: 693 },
+            { x: new Date(2017, 0, 9), y: 657 },
+            { x: new Date(2017, 0, 10), y: 663 },
+            { x: new Date(2017, 0, 11), y: 639 },
+            { x: new Date(2017, 0, 12), y: 673 },
+            { x: new Date(2017, 0, 13), y: 660 },
+            { x: new Date(2017, 0, 14), y: 562 },
+            { x: new Date(2017, 0, 15), y: 643 },
+            { x: new Date(2017, 0, 16), y: 570 }
+          ] {% endcomment %}
+        }]
+      });
+      chart.render();
+      console.log(chart.data[0]['dataPoints'])
+      console.log(chart.data[1]['dataPoints'])
+      function toogleDataSeries(e){
+        if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+          e.dataSeries.visible = false;
+        } else{
+          e.dataSeries.visible = true;
+        }
+        chart.render();
+      }
+    }
+    </script>
+</html>
