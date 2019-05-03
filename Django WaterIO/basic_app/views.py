@@ -107,6 +107,7 @@ def load_sites(request):
         import os
         
         current_directory = os.getcwd()+'\\basic_app\\website_data_20190225.csv'
+        current_directory = current_directory.replace('\\','/')
         ori = pd.read_csv(current_directory)
         block = request.GET.get('block')
         chk=[]
@@ -130,6 +131,7 @@ def model(request):
         import os
         
         current_directory = os.getcwd()+'\\basic_app\\website_data_20190225.csv'
+        current_directory = current_directory.replace('\\','/')
         ori = pd.read_csv(current_directory)
         ori.drop(['STATE', 'DISTRICT', 'WLCODE', 'SITE_TYPE', 'TEH_NAME', 'LAT', 'LON'], axis=1, inplace=True)
         ori.replace(to_replace="'0", value=0, inplace=True)    
