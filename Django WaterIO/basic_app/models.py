@@ -29,6 +29,7 @@ class GWL_inputs(models.Model):
     import os
     
     current_directory = os.getcwd()+'\\basic_app\\website_data_20190225.csv'
+    current_directory = current_directory.replace('\\','/')
     ori = pd.read_csv(current_directory)
 
     dataset = ori['STATE'].unique()
