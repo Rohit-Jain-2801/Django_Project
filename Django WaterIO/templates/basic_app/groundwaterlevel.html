@@ -2,6 +2,7 @@
 {% load static from staticfiles %}
 {% load crispy_forms_tags %}
 <html lang="en">
+  
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,40 +12,53 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <title>Water.IO</title>
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image">
-    <style>
-        #header{
-/*            background-image: url("C:\Users\Mahe\Desktop\header.jpg") center center / cover no-repeat;*/
-            background-image: url("{% static 'images/header.jpg' %}");
-            font-family: 'Wendy One', sans-serif;
-/*            background: #a8e5ef;*/
-        }
-        hr.new{
-            border: 1px solid black;
-        }
-        .fo{
-            color:#007bff;
-            font-size: 20px; 
-        }
-        footer{
-          background: black;
-          color: white;
-        }
-    </style>
     
+    <style>
+      #header{
+/*        background-image: url("C:\Users\Mahe\Desktop\header.jpg") center center / cover no-repeat;*/
+        background-image: url("{% static 'images/header.jpg' %}");
+        font-family: 'Wendy One', sans-serif;
+/*        background: #a8e5ef;*/
+      }
+      hr.new{
+        border: 1px solid black;
+      }
+      .fo{
+        color:#007bff;
+        font-size: 20px;
+      }
+      footer{
+        background: black;
+        color: white;
+      }
+      #text{
+        display: none;
+        font-size: 10vw;
+        font-family: 'Wendy One', sans-serif;
+      }
+      #chartContainer{
+        height: 300px;
+        width: 100%;
+        display:none
+      }
+    </style>
   </head>
+
   <body>
     <nav class="navbar bg-dark navbar-dark fo">
-        <div class="container">
-            <a href="{% url 'app:page_one' %}" class="navrbar-brand"><i class="fas fa-tint mr-2"></i>Water.IO</a>
-            {% comment %} <img src="{% static 'images/favicon.ico' %}" alt="Water_Drop"> {% endcomment %}
-            <a href="{% url 'app:user_details' %}" class="nav-link ml-auto"><i class="fas fa-id-badge mr-2"></i>{{ user.username }}</a>
-            <a href="{% url 'logout' %}" class="nav-link ml-2"><i class="fas fa-user-check mr-2"></i>Logout</a>
-        </div>        
+      <div class="container">
+        <a href="{% url 'app:page_one' %}" class="navrbar-brand"><i class="fas fa-tint mr-2"></i>Water.IO</a>
+        {% comment %} <img src="{% static 'images/favicon.ico' %}" alt="Water_Drop"> {% endcomment %}
+        <a href="{% url 'app:user_details' %}" class="nav-link ml-auto"><i class="fas fa-id-badge mr-2"></i>{{ user.username }}</a>
+        <a href="{% url 'logout' %}" class="nav-link ml-sm-2"><i class="fas fa-user-check mr-2"></i>Logout</a>
+      </div>
     </nav>
+
     <div id="header" class="jumbotron text-center">
-        <h1 class="display-3"><b>Ground Water Level</b></h1>
-        <hr class="new" />
+      <h1 class="display-3"><b>Ground Water Level</b></h1>
+      <hr class="new" />
     </div>
+
     <div class="container">
       <form id="personForm" data-sites-url="{% url 'app:ajax_load_sites' %}" action="" method="POST">
         {% csrf_token %}
@@ -52,81 +66,82 @@
         {{ form2|crispy }}
         {{ form3|crispy }}
         <button class="btn btn-primary" type="button" id="model" data-model-url="{% url 'app:ajax_forecast' %}" onclick="myFunction()">Submit</button>
-        <label class="display-1 text-center" id="text" style="display:none;font-family: 'Wendy One', sans-serif;"><b>Processing...</b></label>
+        <br><br>
+        <label class="text-center" id="text"><b>Processing...</b></label>
         <br><br>
       </form>
     </div>
-    <div class="container pl-0 pl-md-auto" id="chartContainer" style="height: 300px; width: 100%; display:none"></div>
 
-    <!-- Footer -->
-      <p class="py-3"></p>
-      <footer class="page-footer font-small pt-2">
-          <div class="container text-center text-md-left">
-            <div class="row">
-              <div class="col-md-3 col-lg-3 mr-auto mt-md-4 my-0 mt-4 mb-0 pl-md-0 pl-lg-auto">
-                <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
-                <p class="mb-1 mb-md-auto"><b>Released on:</b> 30/04/2019</p>
-                <p class="mb-1 mb-md-auto"><b>Tools used:</b> Python, Django, ML, HTML, CSS, Javascript, AJAX</p>
-              </div>
-              <div class="col-md-2 col-lg-2 mx-auto mt-md-4 my-0 mt-4 mb-0 pl-md-0 pl-lg-auto">
-                <h5 class="font-weight-bold text-uppercase mb-4">Developer</h5>
-                <ul class="list-unstyled">
-                  <li><p class="mb-1 mb-md-auto">Rohit P. Jain</p></li>
-                  <li><p class="mb-1 mb-md-auto">SE-IT</p></li>
-                </ul>
-              </div>
-              <div class="col-md-3 col-lg-2 mx-auto mt-md-4 my-0 mt-4 mb-0 pl-md-4 pl-lg-auto">
-                <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
-                <ul class="list-unstyled">
-                  <li><p class="mb-1 mb-md-auto"><i class="fas fa-home mr-2"></i>DJSCOE, Mumbai</p></li>
-                </ul>
-              </div>
-              <div class="col-md-4 col-lg-3 text mx-auto mt-4 mb-0 pl-md-0 pl-lg-auto">
-                <h5 class="font-weight-bold text-uppercase mb-4">Contact Us</h5>
-                <p class="mb-1 mb-md-auto"><i class="fab fa-google-plus-g mr-2"></i>rohitrocks2801@gmail.com</p>
-                <p class="mb-1 mb-md-auto"><i class="fas fa-phone mr-3"></i>8850237301</p>
-              </div>
-            </div>
+    <div class="container pl-0 pl-md-auto" id="chartContainer"></div>
+
+    <p class="py-3"></p>
+    <footer class="page-footer font-small pt-2">
+      <div class="container text-center text-md-left">
+        <div class="row">
+          <div class="col-md-3 col-lg-3 mr-auto mt-md-4 my-0 mt-4 mb-0 pl-md-0 pl-lg-auto">
+            <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
+            <p class="mb-1 mb-md-auto"><b>Released on:</b> 30/04/2019</p>
+            <p class="mb-1 mb-md-auto"><b>Tools used:</b> Python, Django, ML, HTML, CSS, Javascript, AJAX</p>
           </div>
-          <hr class="m-0 mt-2 d-md-none" style="background:white;">
-          <div class="footer-copyright text-center py-2">© 2019 Copyright</div>
-        </footer>
+          <div class="col-md-2 col-lg-2 mx-auto mt-md-4 my-0 mt-4 mb-0 pl-md-0 pl-lg-auto">
+            <h5 class="font-weight-bold text-uppercase mb-4">Developer</h5>
+            <ul class="list-unstyled">
+              <li><p class="mb-1 mb-md-auto">Rohit P. Jain</p></li>
+              <li><p class="mb-1 mb-md-auto">SE-IT</p></li>
+            </ul>
+          </div>
+          <div class="col-md-3 col-lg-2 mx-auto mt-md-4 my-0 mt-4 mb-0 pl-md-4 pl-lg-auto">
+            <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
+            <ul class="list-unstyled">
+              <li><p class="mb-1 mb-md-auto"><i class="fas fa-home mr-2"></i>DJSCOE, Mumbai</p></li>
+            </ul>
+          </div>
+          <div class="col-md-4 col-lg-3 text mx-auto mt-4 mb-0 pl-md-0 pl-lg-auto">
+            <h5 class="font-weight-bold text-uppercase mb-4">Contact Us</h5>
+            <p class="mb-1 mb-md-auto"><i class="fab fa-google-plus-g mr-2"></i>rohitrocks2801@gmail.com</p>
+            <p class="mb-1 mb-md-auto"><i class="fas fa-phone mr-3"></i>8850237301</p>
+          </div>
+        </div>
       </div>
+      <hr class="m-0 mt-2 d-md-none" style="background:white;">
+      <div class="footer-copyright text-center py-2">© 2019 Copyright</div>
+    </footer>
+
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.0.js" integrity="sha256-DYZMCC8HTC+QDr5QNaIcfR7VSPtcISykd+6eSmBW5qo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
-  <script>
 
-      $("#id_block").change(function () {
-        {% comment %} console.log('idhar hai apan log') {% endcomment %}
-      var url = $("#personForm").attr("data-sites-url");      // get the url of the `load_sites` view
-      var blockId = $(this).val();                          // get the selected block ID from the HTML input
+  <script>
+    $("#id_block").change(function () {
+      {% comment %} console.log('idhar hai apan log') {% endcomment %}
+      var url = $("#personForm").attr("data-sites-url");                // get the url of the `load_sites` view
+      var blockId = $(this).val();                                      // get the selected block ID from the HTML input
       console.log($("#id_block").val())
-      $.ajax({                                                // initialize an AJAX request
-        url: url,                                             // set the url of the request (= localhost:8000/basic_app/ajax/load-sites/)
+      $.ajax({                                                          // initialize an AJAX request
+        url: url,                                                       // set the url of the request (= localhost:8000/basic_app/ajax/load-sites/)
         data: {
-          'block': blockId                                  // add the block id to the GET parameters
+          'block': blockId                                              // add the block id to the GET parameters
         },
-        success: function (data) {                            // `data` is the return of the `load_sites` view function
-          $("#id_site").html(data);                           // replace the contents of the site input with the data that came from the server
+        success: function (data) {                                      // `data` is the return of the `load_sites` view function
+          $("#id_site").html(data);                                     // replace the contents of the site input with the data that came from the server
         }
       });
     });
-    {% comment %} alert('connected'); {% endcomment %}
 
     function myFunction(){
+      chartContainer.style.display = "none";
       text.style.display = "block";
-      window.scrollBy(0, 400);
-      var url = $("#model").attr("data-model-url");      
+      window.scrollBy(0, 100);
+      var url = $("#model").attr("data-model-url");
       console.log(url)
-      $.ajax({                                                
-        url: url,                                            
+      $.ajax({
+        url: url,
         data: {
           'block': $("#id_block").val(),
           'site': $("#id_site").val(),
-          'year': $("#id_year").val()                                  
+          'year': $("#id_year").val()
         },
         success: function (data) {
           data = data.split('a')
@@ -158,8 +173,8 @@
 
     graph = function () {
       text.style.display = "none";
-      chartContainer.style.display = "block"
-      window.scrollBy(0, 400);
+      chartContainer.style.display = "block";
+      window.scrollBy(0, 200);
       var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "light2",
@@ -182,7 +197,7 @@
         },
         toolTip:{
           shared:true
-        },  
+        },
         legend:{
           cursor:"pointer",
           verticalAlign: "bottom",
