@@ -1,6 +1,7 @@
 <!doctype html>
 {% load static from staticfiles %}
 <html lang="en">
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,129 +11,137 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <title>Water.IO</title>
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image">
+
     <style>
-        #header{
+      #header{
 /*            background-image: url("C:\Users\Mahe\Desktop\header.jpg") center center / cover no-repeat;*/
-            background-image: url("{% static 'images/header.jpg' %}");
+        background-image: url("{% static 'images/header.jpg' %}");
 /*            background: #a8e5ef;*/
-        }
-        hr.new{
-            border: 1px solid black;
-        }
-        .fo{
-            color:#007bff;
-            font-size: 20px; 
-        }
-        footer{
-          background: black;
-          color: white;
-        }
-    </style>
-    <script>
-    {% if user.is_authenticated %}
-      jQuery(window).load(function() {
-        sessionStorage.setItem('status','loggedIn') 
-      });
-    {% else %}
-      jQuery(window).load(function() {
-        sessionStorage.setItem('status','loggedOut') 
-      });
-    {% endif %}
-      function myFunction() {
-        console.log("A")
-        if (sessionStorage.getItem('status') == 'loggedIn'){
-          console.log("B")
-          window.location.href='{% url 'app:groundwaterlevel' %}';
-        } else {  
-          console.log("C")
-          text.style.display = "block";
-        }
       }
+      hr.new{
+        border: 1px solid black;
+      }
+      .fo{
+        color:#007bff;
+        font-size: 20px; 
+      }
+      footer{
+        background: black;
+        color: white;
+      }
+      .card{
+        height: 100% !important;
+      }
+    </style>
+
+    <script>
+      {% if user.is_authenticated %}
+        jQuery(window).load(function() {
+          sessionStorage.setItem('status','loggedIn') 
+        });
+      {% else %}
+        jQuery(window).load(function() {
+          sessionStorage.setItem('status','loggedOut') 
+        });
+      {% endif %}
+        function myFunction() {
+          console.log("A")
+          if (sessionStorage.getItem('status') == 'loggedIn'){
+            console.log("B")
+            window.location.href='{% url 'app:groundwaterlevel' %}';
+          } else {  
+            console.log("C")
+            text.style.display = "block";
+          }
+        }
     </script>
   </head>
+
   <body>
     <nav class="navbar bg-dark navbar-dark fo">
-        <div class="container">
-            <a href="{% url 'app:page_one' %}" class="navrbar-brand"><i class="fas fa-tint mr-2"></i>Water.IO</a>
-            {% comment %} <img src="{% static 'images/favicon.ico' %}" alt="Water_Drop"> {% endcomment %}
-            {% if user.is_authenticated %}
-              <span class="my-2"><i class="fas fa-smile-wink mr-2"></i>Hi there!</span>
-            {% else %}
-              <a href="{% url 'admin:index' %}" class="nav-link"><i class="fas fa-user-secret mr-2"></i>Admin</a>
-            {% endif %}
-        </div>        
-    </nav>
-    <div id="header" class="jumbotron text-center mb-3">
-        <h1 class="display-3" style="font-family: 'Wendy One', sans-serif;">Water.IO</h1>
-        <hr class="new" />
-        <h4 class="display-6 mb-3">A place that conveys Weather & Ground Water Level!</h4>
+      <div class="container">
+        <a href="{% url 'app:page_one' %}" class="navrbar-brand"><i class="fas fa-tint mr-2"></i>Water.IO</a>
+        {% comment %} <img src="{% static 'images/favicon.ico' %}" alt="Water_Drop"> {% endcomment %}
         {% if user.is_authenticated %}
-          <a href="{% url 'app:user_details' %}" class="btn btn-primary"><i class="fas fa-id-badge mr-2"></i>{{ user.username }}</a>
-          <a href="{% url 'logout' %}" class="btn btn-primary"><i class="fas fa-user-check mr-2"></i>Logout</a>
+          <span class="my-2"><i class="fas fa-smile-wink mr-2"></i>Hi there!</span>
         {% else %}
-          <a href="{% url 'app:user_login' %}" class="btn btn-primary"><i class="fas fa-user-tie mr-2"></i>Login</a>
-          <a href="{% url 'app:register' %}" class="btn btn-success"><i class="fas fa-user-plus mr-2"></i>Register</a>
+          <a href="{% url 'admin:index' %}" class="nav-link"><i class="fas fa-user-secret mr-2"></i>Admin</a>
         {% endif %}
+      </div>        
+    </nav>
+
+    <div id="header" class="jumbotron text-center mb-3">
+      <h1 class="display-3" style="font-family: 'Wendy One', sans-serif;">Water.IO</h1>
+      <hr class="new" />
+      <h4 class="display-6 mb-3">A place that conveys Weather & Ground Water Level!</h4>
+      {% if user.is_authenticated %}
+        <a href="{% url 'app:user_details' %}" class="btn btn-primary"><i class="fas fa-id-badge mr-2"></i>{{ user.username }}</a>
+        <a href="{% url 'logout' %}" class="btn btn-primary"><i class="fas fa-user-check mr-2"></i>Logout</a>
+      {% else %}
+        <a href="{% url 'app:user_login' %}" class="btn btn-primary"><i class="fas fa-user-tie mr-2"></i>Login</a>
+        <a href="{% url 'app:register' %}" class="btn btn-success"><i class="fas fa-user-plus mr-2"></i>Register</a>
+      {% endif %}
     </div>
+
     <div class="container">
       <p class="alert alert-success text-center" id="text" style="display:none"><b>You have to login first to access it!</b></p>
     </div>
+
     <div class="container text-center">
-        <div class="row">
-          <div class="col-sm-6 mb-4">
-            <div class="card text-white bg-danger">
-              <div class="card-body">
-                <h5 class="card-title">Current Weather</h5>
-                <p class="card-text">Access current weather data for over 200,000 cities throughout the world.</p>
-                <a href="{% url 'app:weatherforecast' %}" class="btn btn-primary">Proceed</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 mb-3">
-            <div class="card text-white bg-warning">
-              <div class="card-body">
-                <h5 class="card-title">Ground Water Forecasting</h5>
-                <p class="card-text">Access current ground water level & forethought ground water level for a partiular block.</p>
-                <button class="btn btn-primary" onclick="myFunction()">Proceed</button>
-              </div>
+      <div class="row">
+        <div class="col-sm-6 mb-4">
+          <div class="card text-white bg-danger">
+            <div class="card-body">
+              <h5 class="card-title">Current Weather</h5>
+              <p class="card-text">Access current weather data for over 200,000 cities throughout the world using weather API.</p>
+              <a href="{% url 'app:weatherforecast' %}" class="btn btn-primary">Proceed</a>
             </div>
           </div>
         </div>
-    </div>
-      <!-- Footer -->
-      <footer class="page-footer font-small pt-2">
-          <div class="container text-center text-md-left">
-            <div class="row">
-              <div class="col-md-3 col-lg-3 mr-auto mt-md-4 my-0 mt-4 mb-0 pl-md-0 pl-lg-auto">
-                <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
-                <p class="mb-1 mb-md-auto"><b>Released on:</b> 30/04/2019</p>
-                <p class="mb-1 mb-md-auto"><b>Tools used:</b> Python, Django, ML, HTML, CSS, Javascript, AJAX</p>
-              </div>
-              <div class="col-md-2 col-lg-2 mx-auto mt-md-4 my-0 mt-4 mb-0 pl-md-0 pl-lg-auto">
-                <h5 class="font-weight-bold text-uppercase mb-4">Developer</h5>
-                <ul class="list-unstyled">
-                  <li><p class="mb-1 mb-md-auto">Rohit P. Jain</p></li>
-                  <li><p class="mb-1 mb-md-auto">SE-IT</p></li>
-                </ul>
-              </div>
-              <div class="col-md-3 col-lg-2 mx-auto mt-md-4 my-0 mt-4 mb-0 pl-md-4 pl-lg-auto">
-                <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
-                <ul class="list-unstyled">
-                  <li><p class="mb-1 mb-md-auto"><i class="fas fa-home mr-2"></i>DJSCOE, Mumbai</p></li>
-                </ul>
-              </div>
-              <div class="col-md-4 col-lg-3 text mx-auto mt-4 mb-0 pl-md-0 pl-lg-auto">
-                <h5 class="font-weight-bold text-uppercase mb-4">Contact Us</h5>
-                <p class="mb-1 mb-md-auto"><i class="fab fa-google-plus-g mr-2"></i>rohitrocks2801@gmail.com</p>
-                <p class="mb-1 mb-md-auto"><i class="fas fa-phone mr-3"></i>8850237301</p>
-              </div>
+        <div class="col-sm-6 mb-4">
+          <div class="card text-white bg-warning">
+            <div class="card-body">
+              <h5 class="card-title">Ground Water Forecasting</h5>
+              <p class="card-text">Access current ground water level & forethought ground water level for a partiular block & site.</p>
+              <button class="btn btn-primary" onclick="myFunction()">Proceed</button>
             </div>
           </div>
-          <hr class="m-0 mt-2 d-md-none" style="background:white;">
-          <div class="footer-copyright text-center py-2">© 2019 Copyright</div>
-        </footer>
+        </div>
       </div>
+    </div>
 
+    <footer class="page-footer font-small pt-2">
+      <div class="container text-center text-md-left">
+        <div class="row">
+          <div class="col-md-3 col-lg-3 mr-auto mt-md-4 my-0 mt-4 mb-0 pl-md-0 pl-lg-auto">
+            <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
+            <p class="mb-1 mb-md-auto"><b>Released on:</b> 30/04/2019</p>
+            <p class="mb-1 mb-md-auto"><b>Tools used:</b> Python, Django, ML, HTML, CSS, Javascript, AJAX</p>
+          </div>
+          <div class="col-md-2 col-lg-2 mx-auto mt-md-4 my-0 mt-4 mb-0 pl-md-0 pl-lg-auto">
+            <h5 class="font-weight-bold text-uppercase mb-4">Developer</h5>
+            <ul class="list-unstyled">
+              <li><p class="mb-1 mb-md-auto">Rohit P. Jain</p></li>
+              <li><p class="mb-1 mb-md-auto">SE-IT</p></li>
+            </ul>
+          </div>
+          <div class="col-md-3 col-lg-2 mx-auto mt-md-4 my-0 mt-4 mb-0 pl-md-4 pl-lg-auto">
+            <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
+            <ul class="list-unstyled">
+              <li><p class="mb-1 mb-md-auto"><i class="fas fa-home mr-2"></i>DJSCOE, Mumbai</p></li>
+            </ul>
+          </div>
+          <div class="col-md-4 col-lg-3 text mx-auto mt-4 mb-0 pl-md-0 pl-lg-auto">
+            <h5 class="font-weight-bold text-uppercase mb-4">Contact Us</h5>
+            <p class="mb-1 mb-md-auto"><i class="fab fa-google-plus-g mr-2"></i>rohitrocks2801@gmail.com</p>
+            <p class="mb-1 mb-md-auto"><i class="fas fa-phone mr-3"></i>8850237301</p>
+          </div>
+        </div>
+      </div>
+      <hr class="m-0 mt-2 d-md-none" style="background:white;">
+      <div class="footer-copyright text-center py-2">© 2019 Copyright</div>
+    </footer>
+    
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
