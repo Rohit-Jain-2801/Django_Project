@@ -1,14 +1,11 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseRedirect
-from django.contrib.auth import authenticate,login,logout
-from django.urls import reverse
-from django.contrib.auth.decorators import login_required
-from basic_app.modelforms2 import UserForm,UserProfileInfoForm,UserUpdateForm,ProfileUpdateForm,GWL,Site,Year,CityForm
-from basic_app.models import UserProfileInfo,GWL_inputs,Site_Name,FYear,City
-from django.conf import settings
+from django.urls import reverse,reverse_lazy
 from django.contrib import messages
-from django.urls import reverse_lazy
-import pandas as pd
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
+from basic_app.models import UserProfileInfo,GWL_inputs,Site_Name,FYear,City
+from basic_app.modelforms2 import UserForm,UserProfileInfoForm,UserUpdateForm,ProfileUpdateForm,GWL,Site,Year,CityForm
 from django.db import models
 
 # from basic_app.modelforms2 import UserRegisterForm
@@ -23,8 +20,8 @@ from django.db import models
 #         else:
 #                 form = UserRegisterForm()
 #         return render(request,'basic_app/register.html',{'form':form})
-        
-# Create your views here.
+
+
 def page_one(request):
         return render(request,'basic_app/page_one.html')
 
@@ -64,9 +61,8 @@ def user_login(request):
                                 return HttpResponse("Account NOT Active")
                 else:
                         print("Username: {} and Password: {}".format(username,password))
-                        return HttpResponse("<br><h1>Invalid Login Details!</h1>")
-        else:
-                return render(request,'basic_app/login.html')
+                        messages.warning(request,'Invalid Login Details!')
+        return render(request,'basic_app/login.html')
 
 @login_required
 def user_logout(request):
@@ -74,6 +70,7 @@ def user_logout(request):
         return HttpResponseRedirect(reverse('page_one'))
 
 def user_details(request):
+        from django.conf import settings
         if request.method == 'POST':
                 u = UserUpdateForm(request.POST, instance=request.user)
                 p = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
@@ -105,7 +102,8 @@ def unique(list1):
 
 def load_sites(request):
         import os
-        
+        import pandas as pd
+
         current_directory = os.getcwd()+'\\basic_app\\website_data_20190225.csv'
         current_directory = current_directory.replace('\\','/')
         ori = pd.read_csv(current_directory)
