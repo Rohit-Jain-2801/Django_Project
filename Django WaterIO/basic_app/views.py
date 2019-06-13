@@ -166,6 +166,7 @@ def model(request):
         dataset.drop(['POMRB', 'POMKH', 'PREMON'], axis=1, inplace=True)
         dataset = dataset.iloc[::-1]
 
+        years = dataset['YEAR_OBS']
         dataset['YEAR_OBS'] = pd.to_datetime(dataset['YEAR_OBS'], yearfirst=True, format='%Y', infer_datetime_format=True)
         indexedDataset = dataset.set_index(['YEAR_OBS'])
 
@@ -223,13 +224,14 @@ def model(request):
 
         x2 = []
         for i in range(0, len(a)):
-                t = date(int(2017+i),1,int(3+i))
+                t = date(int(2017+i),1,i%31+1)
                 x2.append([time.mktime(t.timetuple()),a[i]])
         print(x2)
 
         x1 = []
+        y = years.shape[0]-1
         for i in range(0, indexedDataset.shape[0]):
-                t = date(int(1995+i),1,int(3+i))
+                t = date(years[y-i],1,i%31+1)
                 x1.append([time.mktime(t.timetuple()),indexedDataset['MONSOON'][i]])
         print(x1)
         return render(request, 'basic_app/forecast.html', {'gwl1': x1, 'gwl2': 'a', 'gwl3': x2})
