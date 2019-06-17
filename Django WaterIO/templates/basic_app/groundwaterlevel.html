@@ -45,13 +45,16 @@
   </head>
 
   <body>
-    <nav class="navbar bg-dark navbar-dark fo">
-      <div class="container">
-        <a href="{% url 'app:page_one' %}" class="navrbar-brand"><i class="fas fa-tint mr-2"></i>Water.IO</a>
+    <nav class="navbar bg-dark fo navbar-expand-sm">
+      <a href="{% url 'app:page_one' %}" class="navrbar-brand my-auto ml-5"><i class="fas fa-tint mr-2"></i>Water.IO</a>
+      <button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style="justify-content: flex-end">
         {% comment %} <img src="{% static 'images/favicon.ico' %}" alt="Water_Drop"> {% endcomment %}
-        <a href="{% url 'app:user_details' %}" class="nav-link ml-auto"><i class="fas fa-id-badge mr-2"></i>{{ user.username }}</a>
-        <a href="{% url 'logout' %}" class="nav-link ml-sm-2"><i class="fas fa-user-check mr-2"></i>Logout</a>
-      </div>
+        <a href="{% url 'app:user_details' %}" class="nav-item nav-link active" style="text-align:right;><i class="fas fa-id-badge mr-2"></i>{{ user.username }}</a>
+        <a href="{% url 'logout' %}" class="nav-item nav-link active" style="text-align:right;><i class="fas fa-user-check mr-2"></i>Logout</a>
+      </div>        
     </nav>
 
     <div id="header" class="jumbotron text-center">
