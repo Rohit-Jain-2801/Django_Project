@@ -36,6 +36,11 @@
         font-size: 10vw;
         font-family: 'Wendy One', sans-serif;
       }
+      #text2{
+        display: none;
+        font-size: 8vw;
+        font-family: 'Wendy One', sans-serif;
+      }
       #chartContainer{
         height: 300px;
         width: 100%;
@@ -71,6 +76,7 @@
         <button class="btn btn-primary" type="button" id="model" data-model-url="{% url 'app:ajax_forecast' %}" onclick="myFunction()">Submit</button>
         <br><br>
         <label class="text-center" id="text"><b>Processing...</b></label>
+        <label class="text-center" id="text2"><b>Processing Failed...</b></label>
         <br><br>
       </form>
     </div>
@@ -135,6 +141,7 @@
 
     function myFunction(){
       chartContainer.style.display = "none";
+      text2.style.display = "none";
       text.style.display = "block";
       window.scrollBy(0, 100);
       var url = $("#model").attr("data-model-url");
@@ -170,12 +177,17 @@
           }
           console.log(gwl2)
           graph();
+        },
+        error: function(){
+          text.style.display = "none";
+          text2.style.display = "block";
         }
       });
     };
 
     graph = function () {
       text.style.display = "none";
+      text2.style.display = "none";
       chartContainer.style.display = "block";
       window.scrollBy(0, 200);
       var chart = new CanvasJS.Chart("chartContainer", {
